@@ -1,8 +1,16 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import multer from 'multer';
+import cors from 'cors';
 
 dotenv.config();
+
+const app = express();
+app.use(
+    cors({
+        origin: 'http://localhost:3000',
+    })
+);
 
 const upload = multer({
     storage: multer.memoryStorage(),
@@ -14,7 +22,6 @@ const upload = multer({
     }
 });
 
-const app = express();
 const port = process.env.PORT ?? 4000;
 
 app.get('/', (_req, res) => {
