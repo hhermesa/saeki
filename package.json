@@ -1,0 +1,8 @@
+{
+  "name": "saeki-portal",
+  "version": "1.0.0",
+  "author": "Oleks",
+  "license": "ISC",
+  "packageManager": "pnpm@10.7.0",
+  "workspaces": ["packages/*"]
+}
