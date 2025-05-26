@@ -16,8 +16,7 @@ export function Stepper({ steps, current, finished = false, colors }: StepperPro
         <div className="sticky top-0 z-20  p-4 shadow w-full bg-white">
             <div className="flex items-center justify-between w-full">
                 {steps.map((label, idx) => {
-                    const isCompleted = finished ? idx <= current : idx < current;
-                    const isActive    = !finished && idx === current;
+                    const isCompleted = finished ? true : idx < current;                    const isActive    = !finished && idx === current;
                     const bgClass     = isCompleted
                         ? colors.completed + " bg-opacity-20"
                         : isActive

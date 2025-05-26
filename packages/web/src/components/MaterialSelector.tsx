@@ -14,6 +14,7 @@ export default function MaterialSelector({ materials, selectedId, onSelect }: Pr
             {materials.map((m) => (
                 <button
                     key={m.id}
+                    data-cy="material-btn"
                     onClick={() => onSelect(m.id)}
                     className={
                         `p-4 border rounded text-left transition shadow-sm ` +
