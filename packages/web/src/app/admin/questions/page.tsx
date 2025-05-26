@@ -16,8 +16,14 @@ export default function AdminQuestionsPage() {
             try {
                 const data = await apiFetch<Question[]>('/questions');
                 if (!cancelled) setQuestions(data);
-            } catch (err: any) {
-                if (!cancelled) setError(err.message || 'Failed to load questions');
+            } catch (err: unknown) {
+                const message =
+                    err instanceof Error
+                        ? err.message
+                        : typeof err === 'string'
+                            ? err
+                            : JSON.stringify(err);
+                if (!cancelled) setError(message || 'Failed to load questions');
             } finally {
                 if (!cancelled) setLoading(false);
             }

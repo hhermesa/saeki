@@ -5,11 +5,11 @@
   import useMaterials from '@/hooks/useMaterials';
   import ChatWidget from '@/components/ChatWidget';
   import { Stepper } from '@/components/Stepper';
-  import { validateOrder } from '@/lib/validation';
   import { UploadStep } from '@/components/wizardSteps/UploadStep';
   import { ConfigureStep } from '@/components/wizardSteps/ConfigureStep';
   import CheckoutStep from '@/components/wizardSteps/CheckoutStep';
   import { CustomerInfo, CardInfo, PaymentMethod } from '@/types/types';
+ import {apiFetch} from "@/lib/api";
 
   export default function UploadPage() {
     const { files, setFiles, uploads, setUploads, error: uploadError, loading, uploadFiles } = useUpload();
@@ -32,7 +32,6 @@
     const [card, setCard] = useState<CardInfo>({ number: '', holder: '', cvv: '' });
 
     const [orderSuccess, setOrderSuccess] = useState<number | null>(null);
-    const [orderError, setOrderError] = useState<string | null>(null);
     const [fileSelectError, setFileSelectError] = useState<string | null>(null);
 
     const [showConfirm, setShowConfirm] = useState(false);
@@ -41,7 +40,7 @@
       return () => { document.body.style.overflow = 'auto'; };
     }, [showConfirm]);
 
-    const handleUploadClick = useCallback(async (e: any) => {
+    const handleUploadClick = useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
       if (!files.length) {
         setFileSelectError('Please select at least one file before uploading.');
@@ -67,13 +66,18 @@
       const form = new FormData();
       form.append('file', poFile);
       try {
-        const res = await fetch('http://localhost:4000/upload', { method: 'POST', body: form });
-        if (!res.ok) throw new Error(await res.text());
-        const [{ fileUrl }] = await res.json();
+        const res = await apiFetch<{ fileUrl: string }[]>('/upload', { method: 'POST', body: form });
+        const [{ fileUrl }] = res;
         setPoUrl(fileUrl);
         setPoError(null);
-      } catch (e: any) {
-        setPoError(e.message);
+      } catch (err: unknown) {
+        const message =
+            err instanceof Error
+                ? err.message
+                : typeof err === 'string'
+                    ? err
+                    : JSON.stringify(err);
+        setPoError(message);
       }
     };
 
@@ -89,7 +93,6 @@
       setPoError(null);
       setPaymentMethod('purchase_order');
       setCard({ number: '', holder: '', cvv: '' });
-      setOrderError(null);
       setShowConfirm(false);
       setStep(0);
       setOrderSuccess(null);
@@ -191,7 +194,6 @@
                               setCard((c) => ({ ...c, [field]: value }))
                           }
                           onOrderSuccess={setOrderSuccess}
-                          onReset={handleReset}
                       />
                   )}
                 </>

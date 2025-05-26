@@ -27,8 +27,15 @@ export default function useUpload() {
             });
             setUploads(data);
             return data;
-        } catch (e: any) {
-            setError(e.message);
+        } catch (err: unknown) {
+            const message =
+                err instanceof Error
+                    ? err.message
+                    : typeof err === 'string'
+                        ? err
+                        : JSON.stringify(err);
+
+            setError(message || 'Failed to upload files');
             return [];
         } finally {
             setLoading(false);

@@ -17,14 +17,13 @@ export interface CheckoutStepProps {
     poUrl: string | null;
     onPoFileChange: (f: File | null) => void;
     onUploadPo: () => Promise<void>;
-    poError: string | null;
     onClearPo: () => void;
     paymentMethod: PaymentMethod;
     onPaymentMethodChange: (m: PaymentMethod) => void;
     card: CardInfo;
+    poError: string | null;
     onOrderSuccess: (orderId: number) => void;
     onCardChange: (field: keyof CardInfo, value: string) => void;
-    onReset: () => void;
 }
 
 export default function CheckoutStep({
@@ -37,14 +36,13 @@ export default function CheckoutStep({
                                          poUrl,
                                          onPoFileChange,
                                          onUploadPo,
-                                         poError,
                                          onClearPo,
+                                         poError,
                                          paymentMethod,
                                          onOrderSuccess,
                                          onPaymentMethodChange,
                                          card,
                                          onCardChange,
-                                         onReset,
                                      }: CheckoutStepProps) {
     const [orderError, setOrderError] = useState<string | null>(null);
     const [showConfirm, setShowConfirm] = useState(false);
@@ -91,8 +89,15 @@ export default function CheckoutStep({
                 body: JSON.stringify(payload),
             });
             onOrderSuccess(orderId);
-        } catch (err: any) {
-            setOrderError(err.message || 'Failed to place order');
+        } catch (err: unknown) {
+            const message =
+                err instanceof Error
+                    ? err.message
+                    : typeof err === 'string'
+                        ? err
+                        : JSON.stringify(err);
+
+            setOrderError(message || 'Failed to place order');
         }
     };
 
@@ -107,8 +112,8 @@ export default function CheckoutStep({
                 onPoFileChange={onPoFileChange}
                 poUrl={poUrl}
                 onUploadPo={onUploadPo}
-                poError={poError}
                 onClearPoUrl={onClearPo}
+                poError={poError}
                 card={card}
                 onCardChange={onCardChange}
             />

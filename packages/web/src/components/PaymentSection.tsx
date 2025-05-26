@@ -155,6 +155,12 @@ export default function PaymentSection({
                         )}
                     </div>
 
+                    {poError && (
+                        <p className="mt-2 text-red-500 text-sm text-center">
+                            {poError}
+                        </p>
+                    )}
+
                 </div>
             )}
         </div>

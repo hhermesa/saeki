@@ -1,6 +1,6 @@
 export const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 
-export async function apiFetch<T = any>(
+export async function apiFetch<T = unknown>(
     path: string,
     options?: RequestInit
 ): Promise<T> {

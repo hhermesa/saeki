@@ -29,9 +29,15 @@ export const QuestionCard: React.FC<QuestionCardProps> = React.memo(({ question,
             });
             onUpdated(updated);
             setResponseText('');
-        } catch (err: any) {
-            const msg = err instanceof Error ? err.message : String(err);
-            setError(msg || 'Failed to save response');
+        } catch (err: unknown) {
+            const message =
+                err instanceof Error
+                    ? err.message
+                    : typeof err === 'string'
+                        ? err
+                        : JSON.stringify(err);
+
+            setError(message || 'Failed to save response');
         } finally {
             setSubmitting(false);
         }
@@ -46,7 +52,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = React.memo(({ question,
             <p className="mt-1">
                 <strong>From:</strong> {question.author_email}
             </p>
-            <p className="mt-2 italic">"{question.message}"</p>
+            <p className="mt-2 italic">&quot;{question.message}&quot;</p>
 
             {question.response ? (
                 <div className="mt-3 p-3 bg-green-50 rounded">
