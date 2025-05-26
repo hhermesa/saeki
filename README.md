@@ -191,5 +191,12 @@ pnpm test --watch  # rerun on changes
 
 ---
 
-> *Note: The free-tier Render server will sleep — the very first request can take \~30–50 s.*
+## 🚨 Impportant
+
+**Since I’m using third-party services, if you’d like to run everything locally, please contact me so I can share the .env variables in a more secure way than just dropping them on GitHub! :)**
+
+**P.S.**
+---
+
+> *The free-tier Render server probably will sleep, so the very first request can take \~10–50 s.*
 
