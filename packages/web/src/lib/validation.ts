@@ -29,7 +29,6 @@ export function validateOrder(
             isPaymentDetailsValid = true;
         }
     } else {
-        // card path
         const { number, holder, cvv } = card;
         if (number.length < 12 || !holder.trim() || (cvv.length !== 3 && cvv.length !== 4)) {
             error = 'Enter valid card';
