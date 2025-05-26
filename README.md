@@ -8,6 +8,8 @@ This is my full-stack demonstration project for a 3D parts ordering workflow, bu
 
 * **Frontend (Next.js + Vercel)**
   [https://saeki-web.vercel.app](https://saeki-web.vercel.app)
+* **Admin Questions Dashboard UI**
+    [https://saeki-web.vercel.app/admin/questions](https://saeki-web.vercel.app/admin/questions)
 * **API (Express + Render)** (no default /GET, so the page will show nothing)
   [https://saeki.onrender.com](https://saeki.onrender.com)
 
