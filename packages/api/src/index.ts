@@ -17,21 +17,21 @@ if (!BUNNY_STORAGE_ZONE || !BUNNY_API_KEY || !BUNNY_PULL_ZONE) {
 
 const app = express();
 
-const allowed = [
-    'http://localhost:3000',
-    process.env.CORS_ORIGIN
-].filter(Boolean);
-
 app.use(
     cors({
         origin: (incomingOrigin, callback) => {
-            if (!incomingOrigin || allowed.includes(incomingOrigin)) {
+            if (
+                !incomingOrigin ||
+                incomingOrigin === 'http://localhost:3000' ||
+                /\.vercel\.app$/.test(incomingOrigin)
+            ) {
                 return callback(null, true);
             }
             callback(new Error(`CORS policy: ${incomingOrigin} not allowed`));
         },
     })
 );
+
 app.use(express.json());
 
 const port = process.env.PORT ?? 4000;
