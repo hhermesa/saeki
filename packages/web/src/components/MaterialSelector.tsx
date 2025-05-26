@@ -18,8 +18,8 @@ export default function MaterialSelector({ materials, selectedId, onSelect }: Pr
                     className={
                         `p-4 border rounded text-left transition shadow-sm ` +
                         (selectedId === m.id
-                            ? 'border-blue-600 bg-blue-50'
-                            : 'hover:border-gray-400')
+                            ? 'border-coral bg-coral/20'
+                            : 'border-gray-300 hover:border-coral')
                     }
                 >
                     <h4 className="font-semibold">{m.name}</h4>

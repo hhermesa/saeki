@@ -3,6 +3,7 @@
 import React from 'react';
 import type { ChangeEvent } from 'react';
 import type {CardInfo, PaymentMethod} from '@/types/types';
+import FileUploadSection from "@/components/FileUploadSection";
 
 interface Props {
     method: PaymentMethod;
@@ -15,7 +16,6 @@ interface Props {
     poError: string | null;
     card: CardInfo;
     onCardChange: (field: keyof CardInfo, val: string) => void;
-    cardError: string | null;
 }
 
 export default function PaymentSection({
@@ -42,7 +42,7 @@ export default function PaymentSection({
                         value="purchase_order"
                         checked={method === 'purchase_order'}
                         onChange={() => onMethodChange('purchase_order')}
-                        className="mr-2"
+                        className="mr-2 accent-charcoal"
                     />
                     Purchase Order
                 </label>
@@ -53,7 +53,7 @@ export default function PaymentSection({
                         value="card"
                         checked={method === 'card'}
                         onChange={() => onMethodChange('card')}
-                        className="mr-2"
+                        className="mr-2 accent-charcoal"
                     />
                     Credit Card
                 </label>
@@ -61,57 +61,87 @@ export default function PaymentSection({
 
             {method === 'card' ? (
                 <div className="space-y-4">
-                    <input
-                        type="text"
-                        placeholder="Card Number"
-                        value={card.number}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                            onCardChange('number', e.target.value.replace(/\D/g, ''))
-                        }
-                        maxLength={19}
-                        className="w-full border rounded px-3 py-2"
-                    />
-                    <input
-                        type="text"
-                        placeholder="Card Holder Name"
-                        value={card.holder}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                            onCardChange('holder', e.target.value)
-                        }
-                        className="w-full border rounded px-3 py-2"
-                    />
-                    <input
-                        type="text"
-                        placeholder="CVV"
-                        value={card.cvv}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                            onCardChange('cvv', e.target.value.replace(/\D/g, ''))
-                        }
-                        maxLength={4}
-                        className="w-32 border rounded px-3 py-2"
-                    />
-                    {cardError && <p className="text-red-500">{cardError}</p>}
+                    <div>
+                        <label
+                            htmlFor="card-number"
+                            className="block text-sm font-medium text-charcoal/70 mb-1"
+                        >
+                            Card Number
+                        </label>
+                        <input
+                            id="card-number"
+                            type="text"
+                            placeholder="Card Number"
+                            value={card.number}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                onCardChange('number', e.target.value.replace(/\D/g, ''))
+                            }
+                            maxLength={19}
+                            className="w-full border border-gray-300 rounded px-3 py-2
+                        focus:outline-none focus:ring-1 focus:ring-coral/40 focus:border-coral/40"
+                        />
+                    </div>
+
+                    <div>
+                        <label
+                            htmlFor="card-holder"
+                            className="block text-sm font-medium text-charcoal/70 mb-1"
+                        >
+                            Card Holder Name
+                        </label>
+                        <input
+                            id="card-holder"
+                            type="text"
+                            placeholder="Card Holder Name"
+                            value={card.holder}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                onCardChange('holder', e.target.value)
+                            }
+                            className="w-full border border-gray-300 rounded px-3 py-2
+                        focus:outline-none focus:ring-1 focus:ring-coral/40 focus:border-coral/40"
+                        />
+                    </div>
+
+                    <div>
+                        <label
+                            htmlFor="cvv"
+                            className="block text-sm font-medium text-charcoal/70 mb-1"
+                        >
+                            CVV
+                        </label>
+                        <input
+                            id="cvv"
+                            type="text"
+                            placeholder="CVV"
+                            value={card.cvv}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                onCardChange('cvv', e.target.value.replace(/\D/g, ''))
+                            }
+                            maxLength={4}
+                            className="w-full border border-gray-300 rounded px-3 py-2
+                        focus:outline-none focus:ring-1 focus:ring-coral/40 focus:border-coral/40"
+                        />
+                    </div>
                 </div>
             ) : (
                 <div className="flex gap-4 flex-col sm:flex-row  items-center">
-                    <input
-                        id="po-uploader"
-                        key={`po-file-input-${method}`}
-                        type="file"
+                    <FileUploadSection
+                        inputId="po-uploader"
+                        files={poFile ? [poFile] : []}
+                        onChange={files => onPoFileChange(files[0] ?? null)}
+                        title="Drag &amp; drop your PDF file here"
+                        subtitle="or click to select"
+                        className="h-20 px-2 flex-grow p-2"
                         accept=".pdf"
-                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                            onPoFileChange(e.target.files?.[0] ?? null)
-                        }
-                        className="flex-grow sm:w-2/3 w-full border rounded px-3 py-2"
                     />
-                    <div className="flex gap-4 w-full sm:w-auto justify-evenly">
+                    <div className="flex-row sm:flex-col flex gap-4 w-full sm:w-auto justify-evenly">
                         <button
                             onClick={onUploadPo}
                             disabled={!poFile || !!poUrl}
-                            className={`px-4 py-2 whitespace-nowrap text-white rounded hover:bg-indigo-700
+                            className={`px-4 py-2 whitespace-nowrap text-white rounded 
         ${poUrl
-                                ? 'bg-green-600 cursor-default hover:bg-green-600'
-                                : 'bg-indigo-600 disabled:opacity-50'}`}
+                                ? 'bg-warm-teal/80 cursor-default hover:bg-warm-teal'
+                                : 'bg-coral/80 disabled:opacity-50 hover:bg-coral disabled:hover:bg-coral/80'}`}
                         >
                             {poUrl ? 'Uploaded ✓' : 'Upload'}
                         </button>
@@ -119,7 +149,7 @@ export default function PaymentSection({
                             <button
                                 type="button"
                                 onClick={onClearPoUrl}
-                                className="px-4 py-2 whitespace-nowrap text-white rounded hover:bg-red-400 bg-red-500"
+                                className="px-4 py-2 whitespace-nowrap text-white rounded hover:bg-red-500 bg-red-400"
                             >
                                 Clear
                             </button>

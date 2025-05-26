@@ -5,10 +5,23 @@ import { useState, useRef, DragEvent } from 'react';
 interface Props {
     inputId: string;
     files: File[];
+    className?: string;
+    accept?: string;
+    title: string;
+    subtitle: string;
+    multiple?: boolean;
     onChange: (files: File[]) => void;
 }
 
-export default function FileUploadSection({ inputId, files, onChange }: Props) {
+export default function FileUploadSection({ inputId,
+                                              files,
+                                              onChange,
+                                              className,
+                                              accept = '',
+                                              multiple = false,
+                                              title,
+                                              subtitle
+}: Props) {
     const [dragging, setDragging] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -32,11 +45,11 @@ export default function FileUploadSection({ inputId, files, onChange }: Props) {
                 setDragging(false);
             }}
             onDrop={handleDrop}
-            className={`relative w-full h-64 flex flex-col items-center justify-center
+            className={`relative w-full  flex flex-col items-center justify-center
         border-4 border-dashed rounded-lg cursor-pointer select-none
-        transition-colors duration-200
+        transition-colors duration-200 ${className}
         ${dragging
-                ? 'border-blue-500 bg-blue-50 bg-opacity-30'
+                ? 'border-charcoal bg-charcoal/10 bg-opacity-30'
                 : 'border-gray-300 bg-white'
             }`}
         >
@@ -44,21 +57,21 @@ export default function FileUploadSection({ inputId, files, onChange }: Props) {
                 ref={inputRef}
                 id={inputId}
                 type="file"
-                accept=".step,.iges"
-                multiple
+                accept={accept}
+                multiple={multiple}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 onChange={e => onChange(Array.from(e.target.files || []))}
             />
 
             {files.length === 0 ? (
                 <div className="text-center text-gray-500">
-                    <p className="mb-2">Drag &amp; drop your STEP/IGES files here</p>
-                    <p className="text-sm">or click to select</p>
+                    <p className="mb-2">{title}</p>
+                    <p className="text-sm">{subtitle}</p>
                 </div>
             ) : (
-                <div className="text-gray-700">
+                <div className="text-gray-700 max-w-[220px] sm:max-w-xs">
                     {files.map((f, i) => (
-                        <p key={i} className="truncate max-w-xs">
+                        <p key={i} className="truncate">
                             {f.name}
                         </p>
                     ))}

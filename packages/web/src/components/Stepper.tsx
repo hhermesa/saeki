@@ -28,7 +28,7 @@ export function Stepper({ steps, current, finished = false, colors }: StepperPro
                         <div
                             key={idx}
                             className={
-                                `flex-1 flex items-center p-2 border rounded-lg mx-1 transition-colors duration-200 ${bgClass}`
+                                `flex-1 flex items-center p-2 shadow rounded-lg mx-1 transition-colors duration-200 ${bgClass}`
                             }
                         >
                             <div className={`h-5 w-5 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-white ${isCompleted ? colors.completed : isActive ? colors.active : colors.upcoming}`}>
