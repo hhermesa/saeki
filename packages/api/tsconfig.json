@@ -8,5 +8,12 @@
     "skipLibCheck": true,
     "rootDir": "src",
     "outDir": "dist"
-  }
+  },
+  "include": ["src/**/*"],
+  "exclude": [
+    "node_modules",
+    "jest.config.ts",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ]
 }
