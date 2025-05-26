@@ -13,7 +13,7 @@ interface StepperProps {
 
 export function Stepper({ steps, current, finished = false, colors }: StepperProps) {
     return (
-        <div className="sticky top-0 z-20 bg-white p-4 shadow w-full">
+        <div className="sticky top-0 z-20  p-4 shadow w-full bg-white">
             <div className="flex items-center justify-between w-full">
                 {steps.map((label, idx) => {
                     const isCompleted = finished ? idx <= current : idx < current;

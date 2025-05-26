@@ -29,7 +29,6 @@ export default function PaymentSection({
                                            onClearPoUrl,
                                            card,
                                            onCardChange,
-                                           cardError,
                                        }: Props) {
     return (
         <div className="space-y-4">

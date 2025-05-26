@@ -40,7 +40,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = React.memo(({ question,
     return (
         <li className="border p-4 rounded">
             <p>
-                <strong>Order #{question.id}</strong> —{' '}
+                <strong>Order #{question.order_id}</strong> —{' '}
                 {new Date(question.created_at).toLocaleString()}
             </p>
             <p className="mt-1">

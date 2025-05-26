@@ -11,10 +11,12 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        'charcoal': '#333333',
-        'eerie-black': '#1f1f1f',
-        'warm-teal': '#20A39E',
-        'coral': '#FF6F61'
+        "charcoal": "#333333",
+        "eerie-black": "#1f1f1f",
+        "warm-teal": "#20A39E",
+        "coral": "#FF6F61",
+        "pastel-lavender": "#FFF8F2",
+        "seashell": "#FFF4EB"
       },
     },
   },

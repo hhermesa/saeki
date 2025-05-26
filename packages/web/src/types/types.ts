@@ -30,6 +30,7 @@ export interface Question {
     response: string | null;
     created_at: string;
     responded_at: string | null;
+    order_id: number
 }
 
 export interface ChatWidgetProps {
