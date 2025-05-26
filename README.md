@@ -129,6 +129,24 @@ pnpm test         # runs all Jest suites (unit + component)
 pnpm test:watch   # rerun on file changes
 ```
 
+### 🧪 API & Integration Tests (Jest + Supertest)
+
+These tests live in `packages/api` and verify your Express routes and business logic end-to-end (in memory):
+
+- **Integration tests** for each REST endpoint
+    - e.g.
+        - `POST /orders` returns `400` on invalid payload
+    - located under `src/__tests__/*.test.ts`
+
+**Run them with:**
+
+```bash
+cd packages/api
+pnpm test       # runs Jest against your API code
+pnpm test --watch  # rerun on changes
+```
+
+
 #### Available test scripts (in `packages/web/package.json`)
 
 ```jsonc
