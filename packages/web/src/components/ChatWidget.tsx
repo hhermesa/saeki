@@ -27,7 +27,7 @@ export default function ChatWidget({ orderId, authorEmail }: ChatWidgetProps) {
     const fetchQuestions = useCallback(async () => {
         try {
             const data = await apiFetch<Question[]>(
-                `/orders/${orderId}/questions`
+                `/questions/orders/${orderId}`
             );
             setQuestions(data);
             if (firstLoadRef.current) {
@@ -65,7 +65,7 @@ export default function ChatWidget({ orderId, authorEmail }: ChatWidgetProps) {
         setError(null);
         try {
             const saved = await apiFetch<Question>(
-                `/orders/${orderId}/questions`,
+                `/questions/orders/${orderId}`,
                 {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -90,7 +90,7 @@ export default function ChatWidget({ orderId, authorEmail }: ChatWidgetProps) {
             <button
                 type="button"
                 onClick={() => setIsOpen((o) => !o)}
-                className="fixed bottom-4 right-4 bg-blue-600 text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700"
+                className="fixed bottom-4 right-4 bg-charcoal text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center hover:bg-eerie-black"
                 aria-label="Chat"
             >
                 💬

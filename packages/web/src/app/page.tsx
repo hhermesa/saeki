@@ -48,7 +48,7 @@
       return () => { document.body.style.overflow = 'auto'; };
     }, [showConfirm]);
 
-    const handleUploadClick = useCallback(async (e) => {
+    const handleUploadClick = useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
 
       if (files.length === 0) {
@@ -77,7 +77,7 @@
 
     const handlePlaceAttempt = () => {
       setOrderError(null);
-      if (!formValidation.isValid) {
+      if (!formValidation.isValid && formValidation.error) {
         return setOrderError(formValidation.error);
       }
       setShowConfirm(true);
@@ -148,7 +148,7 @@
             <p className="text-lg mb-6">🎉 Your order <strong>#{orderSuccess}</strong> has been placed.</p>
             <button
                 onClick={handleReset}
-                className="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700"
+                className="px-6 py-3 bg-charcoal text-white rounded hover:bg-eerie-black"
             >
               Start a New Order
             </button>
