@@ -10,15 +10,26 @@ if (process.env.NODE_ENV !== 'production') {
     dotenv.config();
 }
 
-const { BUNNY_STORAGE_ZONE, BUNNY_API_KEY, BUNNY_PULL_ZONE, PORT } = process.env;
+const { BUNNY_STORAGE_ZONE, BUNNY_API_KEY, BUNNY_PULL_ZONE } = process.env;
 if (!BUNNY_STORAGE_ZONE || !BUNNY_API_KEY || !BUNNY_PULL_ZONE) {
-    throw new Error('Missing one of BUNNY_STORAGE_ZONE, BUNNY_API_KEY, BUNNY_PULL_ZONE, PORT');
+    throw new Error('Missing one of BUNNY_STORAGE_ZONE, BUNNY_API_KEY, BUNNY_PULL_ZONE');
 }
 
 const app = express();
+
+const allowed = [
+    'http://localhost:3000',
+    process.env.CORS_ORIGIN
+].filter(Boolean);
+
 app.use(
     cors({
-        origin: 'http://localhost:3000',
+        origin: (incomingOrigin, callback) => {
+            if (!incomingOrigin || allowed.includes(incomingOrigin)) {
+                return callback(null, true);
+            }
+            callback(new Error(`CORS policy: ${incomingOrigin} not allowed`));
+        },
     })
 );
 app.use(express.json());
