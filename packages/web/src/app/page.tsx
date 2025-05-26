@@ -10,6 +10,7 @@ import PaymentSection from '@/components/PaymentSection';
 import ChatWidget from '@/components/ChatWidget';
 import { apiFetch } from '@/lib/api';
 import { Stepper } from '@/components/Stepper';
+import {validateOrder} from "@/lib/validation";
 
 export default function UploadPage() {
   const { files, setFiles, uploads, setUploads, error: uploadError, loading, uploadFiles } = useUpload();
@@ -39,6 +40,8 @@ export default function UploadPage() {
   const [orderError, setOrderError] = useState<string | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
   const [fileSelectError, setFileSelectError] = useState<string | null>(null);
+
+  const formValidation = validateOrder(customer, paymentMethod, card, poUrl);
 
   useEffect(() => {
     document.body.style.overflow = showConfirm ? 'hidden' : 'auto';
@@ -74,10 +77,8 @@ export default function UploadPage() {
 
   const handlePlaceAttempt = () => {
     setOrderError(null);
-    if (!customer.name || !customer.email) return setOrderError('Enter name and email');
-    if (paymentMethod === 'card') {
-      if (card.number.length < 12 || !card.holder || (card.cvv.length !== 3 && card.cvv.length !== 4))
-        return setOrderError('Enter valid card');
+    if (!formValidation.isValid) {
+      return setOrderError(formValidation.error);
     }
     setShowConfirm(true);
   };
@@ -132,6 +133,14 @@ export default function UploadPage() {
     setOrderSuccess(null);
   };
 
+  const handleClearPo = useCallback(() => {
+    setPoUrl(null);
+    setPoFile(null);
+    setPoError(null);
+    const inp = document.getElementById('po-uploader') as HTMLInputElement | null;
+    if (inp) inp.value = '';
+  }, []);
+
   if (orderSuccess !== null) {
     return (
         <div className="min-h-screen bg-[#FFECD1] flex flex-col items-center justify-center p-6">
@@ -143,6 +152,8 @@ export default function UploadPage() {
           >
             Start a New Order
           </button>
+          {orderSuccess === null ? null : <ChatWidget orderId={orderSuccess} authorEmail={customer.email} />}
+
         </div>
     );
   }
@@ -200,7 +211,7 @@ export default function UploadPage() {
           )}
 
           {step === 2 && (
-              <div className="bg-white rounded-lg shadow-lg p-6 mb-6 space-y-6">
+              <div className="bg-white rounded-lg shadow-lg p-6 mb-6 space-y-6 w-full">
                 <CustomerInfoSection customer={customer} onChange={setCustomer} />
                 <PaymentSection
                     method={paymentMethod}
@@ -210,6 +221,7 @@ export default function UploadPage() {
                     poUrl={poUrl}
                     onUploadPo={handlePoUpload}
                     poError={poError}
+                    onClearPoUrl={handleClearPo}
                     card={card}
                     onCardChange={(f,v)=>setCard(c=>({...c,[f]:v}))}
                     cardError={orderError}
@@ -220,6 +232,11 @@ export default function UploadPage() {
                 >
                   Place Order
                 </button>
+                {orderError && (
+                    <p className="mt-2 text-red-500 text-center">
+                      {orderError}
+                    </p>
+                )}
                 {showConfirm && (
                     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                       <div className="bg-white rounded-lg shadow-lg w-11/12 max-w-md p-6">
@@ -247,7 +264,6 @@ export default function UploadPage() {
                       </div>
                     </div>
                 )}
-                {orderSuccess === null ? null : <ChatWidget orderId={orderSuccess} authorEmail={customer.email} />}
               </div>
           )}
 

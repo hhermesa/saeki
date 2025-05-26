@@ -2,9 +2,7 @@
 
 import React from 'react';
 import type { ChangeEvent } from 'react';
-import type { CardInfo } from '@/types/types';
-
-export type PaymentMethod = 'purchase_order' | 'card';
+import type {CardInfo, PaymentMethod} from '@/types/types';
 
 interface Props {
     method: PaymentMethod;
@@ -13,6 +11,7 @@ interface Props {
     onPoFileChange: (f: File | null) => void;
     poUrl: string | null;
     onUploadPo: () => Promise<void>;
+    onClearPoUrl: () => void;
     poError: string | null;
     card: CardInfo;
     onCardChange: (field: keyof CardInfo, val: string) => void;
@@ -27,6 +26,7 @@ export default function PaymentSection({
                                            poUrl,
                                            onUploadPo,
                                            poError,
+                                           onClearPoUrl,
                                            card,
                                            onCardChange,
                                            cardError,
@@ -93,26 +93,39 @@ export default function PaymentSection({
                     {cardError && <p className="text-red-500">{cardError}</p>}
                 </div>
             ) : (
-                <div className="space-y-4">
+                <div className="flex gap-4 flex-col sm:flex-row  items-center">
                     <input
+                        id="po-uploader"
                         key={`po-file-input-${method}`}
                         type="file"
                         accept=".pdf"
                         onChange={(e: ChangeEvent<HTMLInputElement>) =>
                             onPoFileChange(e.target.files?.[0] ?? null)
                         }
-                        className="w-full border rounded px-3 py-2"
+                        className="flex-grow sm:w-2/3 w-full border rounded px-3 py-2"
                     />
-                    {poFile && (
+                    <div className="flex gap-4 w-full sm:w-auto justify-evenly">
                         <button
                             onClick={onUploadPo}
-                            className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+                            disabled={!poFile || !!poUrl}
+                            className={`px-4 py-2 whitespace-nowrap text-white rounded hover:bg-indigo-700
+        ${poUrl
+                                ? 'bg-green-600 cursor-default hover:bg-green-600'
+                                : 'bg-indigo-600 disabled:opacity-50'}`}
                         >
-                            Upload Purchase Order
+                            {poUrl ? 'Uploaded ✓' : 'Upload'}
                         </button>
-                    )}
-                    {poError && <p className="text-red-500">{poError}</p>}
-                    {poUrl && <p className="text-green-600">Uploaded: {poUrl.split('/').pop()}</p>}
+                        {poUrl && (
+                            <button
+                                type="button"
+                                onClick={onClearPoUrl}
+                                className="px-4 py-2 whitespace-nowrap text-white rounded hover:bg-red-400 bg-red-500"
+                            >
+                                Clear
+                            </button>
+                        )}
+                    </div>
+
                 </div>
             )}
         </div>

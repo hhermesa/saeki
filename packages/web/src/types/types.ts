@@ -36,3 +36,12 @@ export interface ChatWidgetProps {
     orderId: number;
     authorEmail: string;
 }
+
+export type PaymentMethod = 'purchase_order' | 'card';
+
+export interface OrderValidationResult {
+    isCustomerValid: boolean;
+    isPaymentDetailsValid: boolean;
+    isValid: boolean;
+    error?: string;
+}
